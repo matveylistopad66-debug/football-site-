@@ -1,8 +1,10 @@
+import Link from "next/link";
+import Crest from "./Crest";
 import { getDict } from "@/lib/dictionary";
 
 export default function ScorersTable({ scorers, lang }) {
   const t = getDict(lang);
-  if (!scorers.length) return <p className="muted">{t.noData}</p>;
+  if (!scorers || !scorers.length) return <p className="muted pad">{t.noData}</p>;
 
   return (
     <div className="table-wrap">
@@ -23,11 +25,11 @@ export default function ScorersTable({ scorers, lang }) {
             <tr key={`${s.player.name}-${i}`}>
               <td>{i + 1}</td>
               <td className="left">{s.player.name}</td>
-              <td className="left team">
-                {s.team.crest && (
-                  <img src={s.team.crest} alt="" width="20" height="20" loading="lazy" />
-                )}
-                <span>{s.team.shortName || s.team.name}</span>
+              <td className="left">
+                <Link href={`/${lang}/team/${s.team.id}`} className="team">
+                  <Crest team={s.team} />
+                  <span>{s.team.shortName || s.team.name}</span>
+                </Link>
               </td>
               <td>{s.playedMatches ?? "–"}</td>
               <td>

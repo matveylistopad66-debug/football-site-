@@ -1,11 +1,16 @@
 /* ОФОРМЛЕНИЕ САЙТА. Цвета меняются в блоке :root ниже. */
 :root {
-  --bg: #0e1116;
-  --panel: #171c24;
-  --border: #262d38;
-  --text: #e8ecf1;
-  --muted: #8b96a5;
-  --accent: #2ecc71;
+  --bg: #0b0c0d;
+  --panel: #151719;
+  --panel2: #1e2124;
+  --border: #25282c;
+  --text: #f2f3f5;
+  --muted: #8c9198;
+  --accent: #00b96b;
+  --accent-bg: #0d2a1c;
+  --live: #ff4d4f;
+  --yellow: #f5c518;
+  --red: #e5484d;
 }
 
 * {
@@ -32,60 +37,110 @@ a {
 }
 
 main.container {
-  padding-top: 24px;
+  padding-top: 16px;
   padding-bottom: 48px;
 }
 
 h1 {
-  font-size: 1.9rem;
-  margin: 0 0 8px;
+  font-size: 1.7rem;
+  margin: 0 0 4px;
 }
 
 h2 {
-  font-size: 1.25rem;
-  margin: 32px 0 12px;
+  font-size: 1.15rem;
+  margin: 28px 0 12px;
+}
+
+h4 {
+  margin: 14px 0 6px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
 }
 
 .muted {
   color: var(--muted);
 }
 
-/* Шапка */
+.small {
+  font-size: 0.8rem;
+}
+
+.pad {
+  padding: 14px;
+}
+
+.more {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+/* ШАПКА */
 .header {
-  background: var(--panel);
+  background: rgba(11, 12, 13, 0.92);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.header-inner {
+.topbar {
   display: flex;
   align-items: center;
-  gap: 20px;
-  min-height: 56px;
-  flex-wrap: wrap;
-  padding-top: 8px;
+  justify-content: space-between;
+  padding-top: 10px;
   padding-bottom: 8px;
 }
 
 .logo {
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
 }
 
-.nav {
+.logo-ball {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 4px;
+  border-radius: 8px;
+  background: var(--accent-bg);
+}
+
+.tabs {
   display: flex;
-  gap: 16px;
-  flex: 1;
+  gap: 6px;
   overflow-x: auto;
-  white-space: nowrap;
-  font-size: 0.9rem;
-  color: var(--muted);
+  padding-bottom: 10px;
+  scrollbar-width: none;
 }
 
-.nav a:hover {
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.tab:hover {
   color: var(--text);
+}
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #03180d;
+  font-weight: 700;
 }
 
 .lang {
@@ -102,28 +157,91 @@ h2 {
 }
 
 .lang a.active {
-  background: var(--accent);
+  background: var(--panel2);
   border-color: var(--accent);
-  color: #06210f;
+  color: var(--text);
   font-weight: 700;
 }
 
-/* Главная */
-.hero p {
-  color: var(--muted);
-  margin: 0;
-}
-
+/* ПЛАШКИ */
 .notice {
-  margin: 16px 0;
+  margin: 12px 0;
   padding: 10px 14px;
   border: 1px solid #5c4a14;
   background: #2a2410;
   color: #f0d98a;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.9rem;
 }
 
+/* ПОЛОСА ДНЕЙ */
+.datestrip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 2px 0 16px;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.datestrip::-webkit-scrollbar {
+  display: none;
+}
+
+.daypill {
+  flex: 1 0 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+.daypill b {
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.daypill.active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+/* ГРУППА МАТЧЕЙ ЛИГИ */
+.group {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.group-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.flag-sm {
+  font-size: 1.3rem;
+}
+
+.group .matches {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* КАРТОЧКИ ЛИГ */
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
@@ -137,7 +255,7 @@ h2 {
   padding: 16px;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
   transition: border-color 0.15s;
 }
 
@@ -149,12 +267,16 @@ h2 {
   font-size: 1.8rem;
 }
 
-/* Таблицы */
+/* ТАБЛИЦЫ */
 .table-wrap {
   overflow-x: auto;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
+}
+
+.table-wrap.squad {
+  margin-bottom: 12px;
 }
 
 table {
@@ -180,39 +302,63 @@ tbody tr + tr td {
   border-top: 1px solid var(--border);
 }
 
+tr.row-hl td {
+  background: var(--accent-bg);
+  font-weight: 600;
+}
+
+tr.row-hl td:first-child {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
 .left {
   text-align: left;
 }
 
 .team {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.team img,
-.match-team img {
+a.team:hover span,
+a.team:hover strong {
+  color: var(--accent);
+}
+
+img {
   object-fit: contain;
   flex-shrink: 0;
 }
 
-/* Матчи */
+.crest-ph {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--panel2);
+}
+
+/* МАТЧИ */
 .matches {
   list-style: none;
   margin: 0;
   padding: 0;
   background: var(--panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 14px;
 }
 
 .match {
   display: grid;
-  grid-template-columns: 110px 1fr 70px 1fr;
+  grid-template-columns: 112px 1fr 70px 1fr;
   gap: 8px;
   align-items: center;
   padding: 10px 14px;
   font-size: 0.9rem;
+}
+
+.matches.timeonly .match {
+  grid-template-columns: 56px 1fr 70px 1fr;
 }
 
 .match + .match {
@@ -228,6 +374,13 @@ tbody tr + tr td {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+}
+
+.match-team span:not(.crest-ph) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .match-team.right {
@@ -235,13 +388,280 @@ tbody tr + tr td {
   text-align: right;
 }
 
+.match-team:hover span {
+  color: var(--accent);
+}
+
 .match-score {
   text-align: center;
   font-weight: 700;
+  padding: 4px 0;
+  border-radius: 8px;
+  background: var(--panel2);
+}
+
+.match-score:hover {
+  background: var(--accent-bg);
+}
+
+.match-score.is-live {
+  color: var(--live);
 }
 
 .live {
-  color: #ff5a5a;
+  color: var(--live);
+}
+
+/* ВЕРХ СТРАНИЦЫ КЛУБА */
+.hero-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+  margin: 12px 0 0;
+}
+
+.info > div {
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.info dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.info dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+/* ФОРМА КЛУБА (В Н П) */
+.form {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.badge {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #fff;
+  background: #555b63;
+}
+
+.badge.W {
+  background: #1f9d55;
+}
+
+.badge.L {
+  background: #d23c42;
+}
+
+/* ВЕРХ СТРАНИЦЫ МАТЧА */
+.match-hero {
+  text-align: center;
+  padding: 18px 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.hero-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.hero-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-team:hover strong {
+  color: var(--accent);
+}
+
+.hero-score {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.hero-score.is-live {
+  color: var(--live);
+}
+
+/* СОБЫТИЯ МАТЧА */
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.ev {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  font-size: 0.9rem;
+}
+
+.ev + .ev {
+  border-top: 1px solid var(--border);
+}
+
+.ev.away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.ev-min {
+  min-width: 42px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.ev.away .ev-min {
+  text-align: right;
+}
+
+.ev-body em {
+  font-style: normal;
+  color: var(--muted);
+}
+
+/* СОСТАВЫ */
+.lineups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.lineup {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.lineup-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.players {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 0.9rem;
+}
+
+.pl + .pl {
+  border-top: 1px solid var(--border);
+}
+
+.pl-num {
+  width: 24px;
+  color: var(--muted);
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.pl-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.pl-pos {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+/* МЕТКИ: гол, карточки, замены */
+.marks {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.78rem;
+}
+
+.mark i {
+  font-style: normal;
+  color: var(--muted);
+}
+
+.mark.out,
+.mark.out i {
+  color: #ff6b6b;
+}
+
+.mark.in,
+.mark.in i {
+  color: #3ddc84;
+}
+
+.mark.owngoal {
+  filter: hue-rotate(300deg);
+}
+
+.cardmark {
+  display: inline-block;
+  width: 9px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.cardmark.yellow {
+  background: var(--yellow);
+}
+
+.cardmark.red {
+  background: var(--red);
+}
+
+.cardmark.yellowred {
+  background: linear-gradient(135deg, var(--yellow) 50%, var(--red) 50%);
 }
 
 .footer {
@@ -251,11 +671,18 @@ tbody tr + tr td {
   font-size: 0.85rem;
 }
 
-@media (max-width: 560px) {
-  .match {
-    grid-template-columns: 1fr 56px 1fr;
+@media (max-width: 640px) {
+  .match,
+  .matches.timeonly .match {
+    grid-template-columns: 1fr 58px 1fr;
   }
   .match-date {
     grid-column: 1 / -1;
+  }
+  .lineups {
+    grid-template-columns: 1fr;
+  }
+  .hero-score {
+    font-size: 1.8rem;
   }
 }

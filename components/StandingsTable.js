@@ -1,8 +1,11 @@
+import Link from "next/link";
+import Crest from "./Crest";
 import { getDict } from "@/lib/dictionary";
 
-export default function StandingsTable({ table, lang }) {
+// highlightId: id клуба, строку которого нужно выделить
+export default function StandingsTable({ table, lang, highlightId }) {
   const t = getDict(lang);
-  if (!table.length) return <p className="muted">{t.noData}</p>;
+  if (!table || !table.length) return <p className="muted pad">{t.noData}</p>;
 
   return (
     <div className="table-wrap">
@@ -22,13 +25,16 @@ export default function StandingsTable({ table, lang }) {
         </thead>
         <tbody>
           {table.map((row) => (
-            <tr key={row.team.name}>
+            <tr
+              key={row.team.id ?? row.team.name}
+              className={row.team.id === highlightId ? "row-hl" : ""}
+            >
               <td>{row.position}</td>
-              <td className="left team">
-                {row.team.crest && (
-                  <img src={row.team.crest} alt="" width="20" height="20" loading="lazy" />
-                )}
-                <span>{row.team.shortName || row.team.name}</span>
+              <td className="left">
+                <Link href={`/${lang}/team/${row.team.id}`} className="team">
+                  <Crest team={row.team} />
+                  <span>{row.team.shortName || row.team.name}</span>
+                </Link>
               </td>
               <td>{row.playedGames}</td>
               <td>{row.won}</td>

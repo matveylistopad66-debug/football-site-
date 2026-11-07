@@ -2,23 +2,24 @@ import Link from "next/link";
 import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
 import LangSwitch from "./LangSwitch";
+import LeagueTabs from "./LeagueTabs";
 
 export default function Header({ lang }) {
   const t = getDict(lang);
   return (
     <header className="header">
-      <div className="container header-inner">
+      <div className="container topbar">
         <Link href={`/${lang}`} className="logo">
-          ⚽ {t.siteName}
+          <span className="logo-ball">⚽</span> {t.siteName}
         </Link>
-        <nav className="nav">
-          {LEAGUES.map((l) => (
-            <Link key={l.code} href={`/${lang}/league/${l.code}`}>
-              {l.name[lang]}
-            </Link>
-          ))}
-        </nav>
         <LangSwitch lang={lang} />
+      </div>
+      <div className="container">
+        <LeagueTabs
+          lang={lang}
+          homeLabel={t.home}
+          leagues={LEAGUES.map((l) => ({ code: l.code, name: l.name[lang] }))}
+        />
       </div>
     </header>
   );
