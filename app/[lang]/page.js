@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MatchList from "@/components/MatchList";
 import DateStrip from "@/components/DateStrip";
+import FavMatches from "@/components/FavMatches";
 import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
 import { getMatchesWindow } from "@/lib/api";
@@ -16,6 +17,28 @@ export default async function Home({ params, searchParams }) {
   const selected = /^\d{4}-\d{2}-\d{2}$/.test(raw) ? raw : today;
 
   const { demo, error, matches } = await getMatchesWindow();
+  // Облегчённая копия матчей для блока «Мои команды»
+  const slim = (tm) => ({
+    id: tm?.id ?? null,
+    name: tm?.name ?? null,
+    shortName: tm?.shortName ?? null,
+    crest: tm?.crest ?? null,
+  });
+  const compact = matches.map((m) => ({
+    id: m.id,
+    utcDate: m.utcDate,
+    status: m.status,
+    homeTeam: slim(m.homeTeam),
+    awayTeam: slim(m.awayTeam),
+    score: {
+      fullTime: {
+        home: m.score?.fullTime?.home ?? null,
+        away: m.score?.fullTime?.away ?? null,
+      },
+    },
+  }));
+  const favLabels = { title: t.myTeams, edit: t.editFav, cta: t.favCta, empty: t.favNoMatches };
+
   const dayMatches = matches.filter((m) => dayKey(m.utcDate) === selected);
 
   const groups = LEAGUES.map((league) => ({
@@ -27,6 +50,8 @@ export default async function Home({ params, searchParams }) {
     <>
       {demo && <div className="notice">{t.demoNotice}</div>}
       {error && <div className="notice">{t.errorNotice}</div>}
+
+      <FavMatches lang={lang} matches={compact} labels={favLabels} />
 
       <DateStrip lang={lang} t={t} today={today} selected={selected} />
 

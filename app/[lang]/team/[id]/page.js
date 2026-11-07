@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Crest from "@/components/Crest";
+import FollowButton from "@/components/FollowButton";
 import MatchList from "@/components/MatchList";
 import StandingsTable from "@/components/StandingsTable";
 import { getDict } from "@/lib/dictionary";
@@ -96,6 +97,11 @@ export default async function TeamPage({ params }) {
             </Link>
           )}
         </div>
+        <FollowButton
+          team={{ id: teamId, name: team.shortName || team.name, crest: team.crest ?? null }}
+          followLabel={t.follow}
+          followingLabel={t.following}
+        />
       </section>
 
       {info.length > 0 && (

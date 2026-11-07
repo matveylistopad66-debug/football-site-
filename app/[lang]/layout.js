@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import { LANGS, getDict } from "@/lib/dictionary";
+import { SITE_URL } from "@/lib/config";
 import "../globals.css";
 
 export function generateStaticParams() {
@@ -11,8 +12,17 @@ export async function generateMetadata({ params }) {
   const { lang } = await params;
   const t = getDict(lang);
   return {
+    metadataBase: new URL(SITE_URL),
     title: { default: t.siteName, template: `%s | ${t.siteName}` },
     description: t.tagline,
+    alternates: { languages: { ru: "/ru", en: "/en" } },
+    openGraph: {
+      title: t.siteName,
+      description: t.tagline,
+      siteName: t.siteName,
+      type: "website",
+      locale: lang === "ru" ? "ru_RU" : "en_GB",
+    },
   };
 }
 

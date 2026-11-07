@@ -12,7 +12,12 @@ export default function Header({ lang }) {
         <Link href={`/${lang}`} className="logo">
           <span className="logo-ball">⚽</span> {t.siteName}
         </Link>
-        <LangSwitch lang={lang} />
+        <div className="topbar-right">
+          <Link href={`/${lang}/profile`} className="profile-btn">
+            ☆ {t.profile}
+          </Link>
+          <LangSwitch lang={lang} />
+        </div>
       </div>
       <div className="container">
         <LeagueTabs
