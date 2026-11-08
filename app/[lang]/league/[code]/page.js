@@ -4,6 +4,7 @@ import MatchList from "@/components/MatchList";
 import ScorersTable from "@/components/ScorersTable";
 import { getDict } from "@/lib/dictionary";
 import { getLeague } from "@/lib/leagues";
+import { zonesFor } from "@/lib/zones";
 import { getStandings, getMatches, getScorers } from "@/lib/api";
 
 export const revalidate = 300;
@@ -39,7 +40,11 @@ export default async function LeaguePage({ params }) {
       {error && <div className="notice">{t.errorNotice}</div>}
 
       <h2>{t.standings}</h2>
-      <StandingsTable table={standings.table} lang={lang} />
+      <StandingsTable
+        table={standings.table}
+        lang={lang}
+        zones={zonesFor(league.code, standings.table?.length ?? 0)}
+      />
 
       <h2>{t.matches}</h2>
       <MatchList matches={matches.matches} lang={lang} />

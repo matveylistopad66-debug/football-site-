@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 import Crest from "@/components/Crest";
 import Lineups from "@/components/Lineups";
 import MatchEvents from "@/components/MatchEvents";
+import MatchTabs from "@/components/MatchTabs";
+import ContestPanel from "@/components/ContestPanel";
+import StandingsTable from "@/components/StandingsTable";
 import { getDict } from "@/lib/dictionary";
-import { getMatch } from "@/lib/api";
+import { getMatch, getStandings } from "@/lib/api";
 import { buildEvents } from "@/lib/events";
 import { formatDateTime } from "@/lib/format";
+import { LEAGUES } from "@/lib/leagues";
+import { slimMatch } from "@/lib/slim";
+import { zonesFor } from "@/lib/zones";
 
 export const revalidate = 120;
 
@@ -16,7 +22,9 @@ export async function generateMetadata({ params }) {
   const res = await getMatch(id);
   if (!res.match) return {};
   const m = res.match;
-  return { title: `${m.homeTeam?.shortName || m.homeTeam?.name} — ${m.awayTeam?.shortName || m.awayTeam?.name}` };
+  return {
+    title: `${m.homeTeam?.shortName || m.homeTeam?.name} — ${m.awayTeam?.shortName || m.awayTeam?.name}`,
+  };
 }
 
 function HeroTeam({ team, lang }) {
@@ -51,6 +59,65 @@ export default async function MatchPage({ params }) {
   const live = ["IN_PLAY", "PAUSED"].includes(m.status);
   const events = buildEvents(m);
 
+  // Таблица турнира с выделением обеих команд
+  const code = m.competition?.code;
+  let tableNode = <p className="muted pad">{t.noTable}</p>;
+  if (LEAGUES.some((l) => l.code === code)) {
+    const st = await getStandings(code);
+    if (st.table?.length) {
+      tableNode = (
+        <StandingsTable
+          table={st.table}
+          lang={lang}
+          highlightIds={[m.homeTeam?.id, m.awayTeam?.id]}
+          zones={zonesFor(code, st.table.length)}
+        />
+      );
+    }
+  }
+
+  const contestLabels = {
+    loading: t.loading,
+    noStorage: t.contestNoStorage,
+    unavailable: t.contestUnavailable,
+    joinText: t.contestJoinText,
+    nickPlaceholder: t.nickPlaceholder,
+    join: t.join,
+    nickTaken: t.nickTaken,
+    nickBad: t.nickBad,
+    nickNote: t.nickNote,
+    you: t.you,
+    pts: t.pts,
+    noOpen: t.noOpenMatches,
+    save: t.save,
+    saved: t.saved,
+    saveError: t.saveError,
+    fillScore: t.fillScore,
+    closed: t.predClosed,
+    noPred: t.noPred,
+    waiting: t.waitingResult,
+  };
+
+  const tabs = [
+    { id: "events", label: t.tabEvents, content: <MatchEvents events={events} homeId={m.homeTeam?.id} lang={lang} /> },
+    { id: "lineups", label: t.tabLineups, content: <Lineups match={m} events={events} lang={lang} /> },
+    { id: "table", label: t.tabTable, content: tableNode },
+    {
+      id: "predict",
+      label: t.tabPredict,
+      content: (
+        <>
+          <ContestPanel lang={lang} matches={[slimMatch(m)]} labels={contestLabels} />
+          <p>
+            <Link href={`/${lang}/contest`} className="more">
+              {t.goContest} →
+            </Link>
+          </p>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       <section className="match-hero">
@@ -72,11 +139,7 @@ export default async function MatchPage({ params }) {
         </div>
       </section>
 
-      <h2>{t.events}</h2>
-      <MatchEvents events={events} homeId={m.homeTeam?.id} lang={lang} />
-
-      <h2>{t.lineups}</h2>
-      <Lineups match={m} events={events} lang={lang} />
+      <MatchTabs tabs={tabs} />
     </>
   );
 }

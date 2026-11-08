@@ -7,6 +7,7 @@ export default function sitemap() {
   const pages = [];
   for (const lang of LANGS) {
     pages.push({ url: `${SITE_URL}/${lang}`, changeFrequency: "hourly", priority: 1 });
+    pages.push({ url: `${SITE_URL}/${lang}/contest`, changeFrequency: "daily", priority: 0.7 });
     for (const l of LEAGUES) {
       pages.push({
         url: `${SITE_URL}/${lang}/league/${l.code}`,

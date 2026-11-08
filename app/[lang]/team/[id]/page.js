@@ -8,6 +8,7 @@ import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
 import { getTeam, getTeamMatches, getStandings } from "@/lib/api";
 import { age, posGroup } from "@/lib/format";
+import { zonesFor } from "@/lib/zones";
 
 export const revalidate = 300;
 
@@ -151,7 +152,12 @@ export default async function TeamPage({ params }) {
       {miniTable.length > 0 && (
         <>
           <h2>{t.tablePosition}</h2>
-          <StandingsTable table={miniTable} lang={lang} highlightId={teamId} />
+          <StandingsTable
+            table={miniTable}
+            lang={lang}
+            highlightId={teamId}
+            zones={zonesFor(league.code, standings.table.length)}
+          />
           <p>
             <Link href={`/${lang}/league/${league.code}`} className="more">
               {t.fullTable} →

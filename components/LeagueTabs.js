@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 // Горизонтальное меню лиг с подсветкой текущей страницы
-export default function LeagueTabs({ lang, homeLabel, leagues }) {
+export default function LeagueTabs({ lang, homeLabel, contestLabel, leagues }) {
   const path = usePathname() || "";
   const items = [
     { href: `/${lang}`, label: homeLabel, active: path === `/${lang}` },
@@ -13,6 +13,7 @@ export default function LeagueTabs({ lang, homeLabel, leagues }) {
       label: l.name,
       active: path.startsWith(`/${lang}/league/${l.code}`),
     })),
+    { href: `/${lang}/contest`, label: `🏆 ${contestLabel}`, active: path.startsWith(`/${lang}/contest`) },
   ];
   return (
     <nav className="tabs">

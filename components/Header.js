@@ -3,6 +3,7 @@ import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
 import LangSwitch from "./LangSwitch";
 import LeagueTabs from "./LeagueTabs";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header({ lang }) {
   const t = getDict(lang);
@@ -16,6 +17,7 @@ export default function Header({ lang }) {
           <Link href={`/${lang}/profile`} className="profile-btn">
             ☆ {t.profile}
           </Link>
+          <ThemeToggle toLight={t.themeToLight} toDark={t.themeToDark} />
           <LangSwitch lang={lang} />
         </div>
       </div>
@@ -23,6 +25,7 @@ export default function Header({ lang }) {
         <LeagueTabs
           lang={lang}
           homeLabel={t.home}
+          contestLabel={t.contest}
           leagues={LEAGUES.map((l) => ({ code: l.code, name: l.name[lang] }))}
         />
       </div>

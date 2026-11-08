@@ -2,9 +2,11 @@ import Link from "next/link";
 import MatchList from "@/components/MatchList";
 import DateStrip from "@/components/DateStrip";
 import FavMatches from "@/components/FavMatches";
+import MatchOfDay from "@/components/MatchOfDay";
 import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
-import { getMatchesWindow } from "@/lib/api";
+import { getMatchesWindow, getStandings } from "@/lib/api";
+import { pickMatchOfDay } from "@/lib/motd";
 import { dayKey, todayKey } from "@/lib/format";
 
 export default async function Home({ params, searchParams }) {
@@ -39,6 +41,29 @@ export default async function Home({ params, searchParams }) {
   }));
   const favLabels = { title: t.myTeams, edit: t.editFav, cta: t.favCta, empty: t.favNoMatches };
 
+  // Матч дня: сегодняшние матчи (сначала не сыгранные), иначе ближайший день с матчами
+  const okStatus = (m) => !["POSTPONED", "CANCELLED", "SUSPENDED"].includes(m.status);
+  const todays = matches.filter((m) => dayKey(m.utcDate) === today && okStatus(m));
+  let pool = todays.filter((m) => m.status !== "FINISHED");
+  if (!pool.length) pool = todays;
+  if (!pool.length) {
+    const future = matches
+      .filter((m) => okStatus(m) && Date.parse(m.utcDate) > Date.now())
+      .sort((a, b) => new Date(a.utcDate) - new Date(b.utcDate));
+    const firstDay = future.length ? dayKey(future[0].utcDate) : null;
+    pool = future.filter((m) => dayKey(m.utcDate) === firstDay);
+  }
+  let featured = null;
+  if (pool.length) {
+    const codes = [...new Set(pool.map((m) => m.competition?.code).filter(Boolean))];
+    const results = await Promise.all(codes.map((c) => getStandings(c)));
+    const tables = {};
+    codes.forEach((c, i) => {
+      tables[c] = results[i].table ?? [];
+    });
+    featured = pickMatchOfDay(pool, tables);
+  }
+
   const dayMatches = matches.filter((m) => dayKey(m.utcDate) === selected);
 
   const groups = LEAGUES.map((league) => ({
@@ -50,6 +75,8 @@ export default async function Home({ params, searchParams }) {
     <>
       {demo && <div className="notice">{t.demoNotice}</div>}
       {error && <div className="notice">{t.errorNotice}</div>}
+
+      {featured && <MatchOfDay match={featured} lang={lang} />}
 
       <FavMatches lang={lang} matches={compact} labels={favLabels} />
 
