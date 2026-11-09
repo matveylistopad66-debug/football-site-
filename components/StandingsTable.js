@@ -4,7 +4,7 @@ import { getDict } from "@/lib/dictionary";
 
 // highlightId / highlightIds: клуб(ы), строку которых нужно выделить
 // zones: цветные зоны таблицы (см. lib/zones.js)
-export default function StandingsTable({ table, lang, highlightId, highlightIds, zones = [] }) {
+export default function StandingsTable({ table, lang, highlightId, highlightIds, zones = [], form }) {
   const t = getDict(lang);
   if (!table || !table.length) return <p className="muted pad">{t.noData}</p>;
 
@@ -30,6 +30,7 @@ export default function StandingsTable({ table, lang, highlightId, highlightIds,
               <th>{t.goals}</th>
               <th>{t.gd}</th>
               <th>{t.points}</th>
+              {form && <th className="formcol">{t.formCol}</th>}
             </tr>
           </thead>
           <tbody>
@@ -58,6 +59,15 @@ export default function StandingsTable({ table, lang, highlightId, highlightIds,
                   <td>
                     <strong>{row.points}</strong>
                   </td>
+                  {form && (
+                    <td className="formcol">
+                      <span className="fdots">
+                        {(form[row.team.id] ?? []).map((r, i) => (
+                          <i key={i} className={`fd ${r}`} title={r} />
+                        ))}
+                      </span>
+                    </td>
+                  )}
                 </tr>
               );
             })}

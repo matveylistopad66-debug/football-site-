@@ -105,6 +105,12 @@ export default async function TeamPage({ params }) {
         />
       </section>
 
+      <p>
+        <Link href={`/${lang}/compare?a=${teamId}`} className="more">
+          ⚖️ {t.compareWith} →
+        </Link>
+      </p>
+
       {info.length > 0 && (
         <dl className="info">
           {info.map(([k, v]) => (

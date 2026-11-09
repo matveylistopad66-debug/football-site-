@@ -42,6 +42,10 @@ function HeroTeam({ team, lang }) {
   );
 }
 
+import AutoRefresh from "@/components/AutoRefresh";
+import ShareButtons from "@/components/ShareButtons";
+import VoteBox from "@/components/VoteBox";
+
 export default async function MatchPage({ params }) {
   const { lang, id } = await params;
   if (!/^\d+$/.test(id)) notFound();
@@ -138,6 +142,31 @@ export default async function MatchPage({ params }) {
           {m.venue ? ` · ${m.venue}` : ""}
         </div>
       </section>
+
+      <AutoRefresh active={live} label={t.autoUpdate} />
+
+      <ShareButtons
+        title={`${m.homeTeam?.shortName || m.homeTeam?.name} — ${m.awayTeam?.shortName || m.awayTeam?.name}`}
+        startIso={m.utcDate}
+        showCalendar={["SCHEDULED", "TIMED"].includes(m.status)}
+        labels={{ share: t.share, calendar: t.addCalendar, copied: t.linkCopied }}
+      />
+
+      {LEAGUES.some((l) => l.code === code) && (
+        <VoteBox
+          matchId={m.id}
+          open={["SCHEDULED", "TIMED"].includes(m.status) && Date.parse(m.utcDate) > Date.now()}
+          labels={{
+            title: t.voteTitle,
+            home: t.voteHome,
+            draw: t.voteDraw,
+            away: t.voteAway,
+            count: t.voteCount,
+            thanks: t.voteThanks,
+            error: t.voteError,
+          }}
+        />
+      )}
 
       <MatchTabs tabs={tabs} />
     </>

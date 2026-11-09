@@ -3,9 +3,11 @@ import MatchList from "@/components/MatchList";
 import DateStrip from "@/components/DateStrip";
 import FavMatches from "@/components/FavMatches";
 import MatchOfDay from "@/components/MatchOfDay";
+import AutoRefresh from "@/components/AutoRefresh";
+import NewsList from "@/components/NewsList";
 import { getDict } from "@/lib/dictionary";
 import { LEAGUES } from "@/lib/leagues";
-import { getMatchesWindow, getStandings } from "@/lib/api";
+import { getMatchesWindow, getStandings, getNews } from "@/lib/api";
 import { pickMatchOfDay } from "@/lib/motd";
 import { dayKey, todayKey } from "@/lib/format";
 
@@ -64,6 +66,9 @@ export default async function Home({ params, searchParams }) {
     featured = pickMatchOfDay(pool, tables);
   }
 
+  const live = matches.some((m) => ["IN_PLAY", "PAUSED"].includes(m.status));
+  const { news } = await getNews();
+
   const dayMatches = matches.filter((m) => dayKey(m.utcDate) === selected);
 
   const groups = LEAGUES.map((league) => ({
@@ -75,6 +80,8 @@ export default async function Home({ params, searchParams }) {
     <>
       {demo && <div className="notice">{t.demoNotice}</div>}
       {error && <div className="notice">{t.errorNotice}</div>}
+
+      <AutoRefresh active={live} label={t.autoUpdate} />
 
       {featured && <MatchOfDay match={featured} lang={lang} />}
 
@@ -95,6 +102,18 @@ export default async function Home({ params, searchParams }) {
             <MatchList matches={items} lang={lang} timeOnly />
           </section>
         ))
+      )}
+
+      {news.length > 0 && (
+        <>
+          <h2>{t.news}</h2>
+          <NewsList news={news.slice(0, 5)} lang={lang} emptyText={t.newsEmpty} />
+          <p>
+            <Link href={`/${lang}/news`} className="more">
+              {t.allNews} →
+            </Link>
+          </p>
+        </>
       )}
 
       <h2>{t.leagues}</h2>

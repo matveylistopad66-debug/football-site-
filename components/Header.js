@@ -14,8 +14,11 @@ export default function Header({ lang }) {
           <span className="logo-ball">⚽</span> {t.siteName}
         </Link>
         <div className="topbar-right">
-          <Link href={`/${lang}/profile`} className="profile-btn">
+          <Link href={`/${lang}/profile`} className="profile-btn hide-m">
             ☆ {t.profile}
+          </Link>
+          <Link href={`/${lang}/search`} className="profile-btn" aria-label={t.search}>
+            🔍
           </Link>
           <ThemeToggle toLight={t.themeToLight} toDark={t.themeToDark} />
           <LangSwitch lang={lang} />
@@ -26,6 +29,8 @@ export default function Header({ lang }) {
           lang={lang}
           homeLabel={t.home}
           contestLabel={t.contest}
+          newsLabel={t.news}
+          compareLabel={t.compare}
           leagues={LEAGUES.map((l) => ({ code: l.code, name: l.name[lang] }))}
         />
       </div>

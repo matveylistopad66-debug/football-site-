@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
+import BottomNav from "@/components/BottomNav";
+import SwRegister from "@/components/SwRegister";
 import { LANGS, getDict } from "@/lib/dictionary";
 import { SITE_URL } from "@/lib/config";
 import "../globals.css";
@@ -15,13 +17,14 @@ export async function generateMetadata({ params }) {
     metadataBase: new URL(SITE_URL),
     title: { default: t.siteName, template: `%s | ${t.siteName}` },
     description: t.tagline,
-    alternates: { languages: { ru: "/ru", en: "/en" } },
+    manifest: "/manifest.webmanifest",
+    alternates: { languages: { ru: "/ru", en: "/en", be: "/be" } },
     openGraph: {
       title: t.siteName,
       description: t.tagline,
       siteName: t.siteName,
       type: "website",
-      locale: lang === "ru" ? "ru_RU" : "en_GB",
+      locale: lang === "ru" ? "ru_RU" : lang === "be" ? "be_BY" : "en_GB",
     },
   };
 }
@@ -47,6 +50,11 @@ export default async function LangLayout({ children, params }) {
         <footer className="footer">
           <div className="container">{t.footer}</div>
         </footer>
+        <BottomNav
+          lang={lang}
+          labels={{ home: t.home, search: t.search, news: t.news, contest: t.contest, profile: t.profile }}
+        />
+        <SwRegister />
       </body>
     </html>
   );

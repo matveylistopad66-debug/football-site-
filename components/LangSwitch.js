@@ -11,7 +11,7 @@ export default function LangSwitch({ lang }) {
 
   return (
     <div className="lang">
-      {["ru", "en"].map((l) => (
+      {["ru", "en", "be"].map((l) => (
         <Link
           key={l}
           href={build(l)}
